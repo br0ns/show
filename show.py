@@ -36,8 +36,10 @@ def _get(this):
 
     name = this.f_code.co_name
     i = 0
+    start_col = 0
     while True:
         c = get()
+        start_col += 1
         if c == '\n':
             raise Exception(f'Could not find call to {name} on line {lino} in {path}')
         if i == len(name):
@@ -170,7 +172,7 @@ def _get(this):
     Collector().visit(t)
 
     # Replace outer call with whitespace
-    template[0] = Verbatim(' ' * (len(name) + 1) + template[0][len(name) + 1:])
+    template[0] = Verbatim(' ' * start_col + template[0][len(name) + 1:])
     template[-1] = Verbatim(template[-1][:-1])
 
     # Split/join verbatim strings, such that a string has at most one line break
